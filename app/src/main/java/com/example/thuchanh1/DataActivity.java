@@ -1,6 +1,7 @@
 package com.example.thuchanh1;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -58,10 +59,23 @@ public class DataActivity extends AppCompatActivity {
         getDataFromMockAPI(url);
 
 
-        adapter = new UserAdapter(users, this);
-        rcv_user.setAdapter(adapter);
+//        adapter = new UserAdapter(users, this);
+//        rcv_user.setAdapter(adapter);
+//        rcv_user.setLayoutManager(new GridLayoutManager(this, 1));
+        btn_add.setOnClickListener(v->{
+            String txt_Name = edt_name.getText().toString();
+            if(TextUtils.isEmpty(txt_Name)){
+                Toast.makeText(DataActivity.this,"Nhap Name....",Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String txt_email = edt_email.getText().toString();
+            if(TextUtils.isEmpty(txt_email)){
+                Toast.makeText(DataActivity.this,"Nhap email....",Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        rcv_user.setLayoutManager(new GridLayoutManager(this, 1));
+            postAPI(url);
+        });
 
 
     }
