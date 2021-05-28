@@ -2,6 +2,7 @@ package com.example.thuchanh1;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -58,10 +59,6 @@ public class DataActivity extends AppCompatActivity {
 
         getDataFromMockAPI(url);
 
-
-//        adapter = new UserAdapter(users, this);
-//        rcv_user.setAdapter(adapter);
-//        rcv_user.setLayoutManager(new GridLayoutManager(this, 1));
         btn_add.setOnClickListener(v->{
             String txt_Name = edt_name.getText().toString();
             if(TextUtils.isEmpty(txt_Name)){
@@ -76,7 +73,12 @@ public class DataActivity extends AppCompatActivity {
 
             postAPI(url);
         });
-
+        btn_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PutAPI(url);
+            }
+        });
 
     }
     private void getDataFromMockAPI(String url) {
@@ -91,7 +93,6 @@ public class DataActivity extends AppCompatActivity {
                                 JSONObject jsonObject = (JSONObject) response.get(i);
                                 User user = new User();
                                 user.setId(jsonObject.getString("id"));
-
                                 user.setName(jsonObject.getString("name"));
                                 user.setEmail(jsonObject.getString("email"));
 
@@ -145,6 +146,34 @@ public class DataActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
         getDataFromMockAPI(url);
+    }
+    private void PutAPI(String url){
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url + "/" + edt_id.getText().toString(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(DataActivity.this, "Successfully", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(DataActivity.this, "Error by Put data!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        ){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("name",edt_name.getText().toString());
+                params.put("email",edt_email.getText().toString());
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
     }
 
 
