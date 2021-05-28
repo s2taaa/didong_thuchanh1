@@ -77,6 +77,8 @@ public class DataActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 PutAPI(url);
+                getDataFromMockAPI(url);
+
             }
         });
 
@@ -150,6 +152,7 @@ public class DataActivity extends AppCompatActivity {
     private void PutAPI(String url){
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, url + "/" + edt_id.getText().toString(),
                 new Response.Listener<String>() {
+
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(DataActivity.this, "Successfully", Toast.LENGTH_SHORT).show();
