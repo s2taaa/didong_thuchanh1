@@ -14,10 +14,12 @@ import java.util.List;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.NameViewHolder> {
     private List<User> users;
     private LayoutInflater inflater;
+    private Context context;
 
     public UserAdapter(List<User> users, Context context) {
         this.users = users;
         this.inflater = LayoutInflater.from(context);
+        this.context=context;
     }
 
     @NonNull
@@ -30,7 +32,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.NameViewHolder
     @Override
     public void onBindViewHolder(@NonNull UserAdapter.NameViewHolder holder, int position) {
         User user = users.get(position);
-        holder.txt_id.setText("Id : "+user.getId());
         holder.txt_email.setText("Age : " +user.getEmail());
         holder.txt_name.setText("Name : "+user.getName());
     }
@@ -46,7 +47,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.NameViewHolder
         public NameViewHolder(@NonNull View itemView , UserAdapter adapter) {
             super(itemView);
             this.adapter = adapter;
-            txt_id = itemView.findViewById(R.id.txt_id);
             txt_name = itemView.findViewById(R.id.txt_name);
             txt_email = itemView.findViewById(R.id.txt_email);
         }

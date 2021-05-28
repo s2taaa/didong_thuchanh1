@@ -5,14 +5,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -20,7 +24,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class DataActivity extends AppCompatActivity {
@@ -48,48 +54,85 @@ public class DataActivity extends AppCompatActivity {
         btn_get = findViewById(R.id.btn_get);
 
 
-        getJsonObjectArray(url, users);
+
+        getDataFromMockAPI(url);
+
 
         adapter = new UserAdapter(users, this);
         rcv_user.setAdapter(adapter);
+
         rcv_user.setLayoutManager(new GridLayoutManager(this, 1));
 
 
     }
+    private void getDataFromMockAPI(String url) {
+        users = new ArrayList<>();
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url,
+                new Response.Listener<JSONArray>(){
 
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        for(int i =0 ; i<response.length();i++){
+                            try {
+                                JSONObject jsonObject = (JSONObject) response.get(i);
+                                User user = new User();
+                                user.setId(jsonObject.getString("id"));
 
+                                user.setName(jsonObject.getString("name"));
+                                user.setEmail(jsonObject.getString("email"));
 
-        private void getJsonObjectArray(String url, List<User> users){
-            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url,
-                    new Response.Listener<JSONArray>(){
-
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            for(int i =0 ; i<response.length();i++){
-                                try {
-                                    JSONObject jsonObject = (JSONObject) response.get(i);
-                                    User user = new User();
-                                    user.setId(jsonObject.getString("id").toString());
-                                    user.setEmail(jsonObject.getString("age"));
-                                    user.setName(jsonObject.getString("name"));
-                                    users.add(user);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                users.add(user);
+                                adapter = new UserAdapter(users,DataActivity.this);
+                                rcv_user.setAdapter(adapter);
+                                rcv_user.setLayoutManager(new GridLayoutManager(DataActivity.this ,1));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
                         }
-                    },
-                    new Response.ErrorListener(){
+                    }
+                },
+                new Response.ErrorListener(){
 
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(DataActivity.this,
-                                    "Error by get Json Array!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(jsonArrayRequest);
-        }
-
-
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(DataActivity.this,
+                                "Error by get Json Array!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(jsonArrayRequest);
     }
+    private void postAPI(String url) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(DataActivity.this, "Successfully", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(DataActivity.this, "Error by Post data!", Toast.LENGTH_SHORT).show();
+                    }
+                }){
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String>map = new HashMap<>();
+
+                map.put("name",edt_name.getText().toString());
+                map.put("email",edt_email.getText().toString());
+
+
+                return  map;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+        getDataFromMockAPI(url);
+    }
+
+
+
+}

@@ -26,7 +26,7 @@
         android:layout_marginTop="60dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Email"
+        android:text="s2taaa@gmail.com"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -38,7 +38,7 @@
         android:layout_marginTop="56dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="123456"
         app:layout_constraintEnd_toEndOf="@+id/textEmail"
         app:layout_constraintHorizontal_bias="0.166"
         app:layout_constraintStart_toStartOf="@+id/textEmail"
