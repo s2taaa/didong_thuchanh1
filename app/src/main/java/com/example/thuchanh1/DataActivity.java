@@ -55,7 +55,7 @@ public class DataActivity extends AppCompatActivity {
         btn_update = findViewById(R.id.btn_update);
         btn_get = findViewById(R.id.btn_get);
 
-
+        // gọi hàm getdata
 
         getDataFromMockAPI(url);
 
@@ -92,13 +92,14 @@ public class DataActivity extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
                         for(int i =0 ; i<response.length();i++){
                             try {
+                               // lấy từng user bỏ vào trong list users  từ api
                                 JSONObject jsonObject = (JSONObject) response.get(i);
                                 User user = new User();
                                 user.setId(jsonObject.getString("id"));
                                 user.setName(jsonObject.getString("name"));
                                 user.setEmail(jsonObject.getString("email"));
-
                                 users.add(user);
+                                // bỏ user vào trong useradapter, set useradapter vào recyclerview
                                 adapter = new UserAdapter(users,DataActivity.this);
                                 rcv_user.setAdapter(adapter);
                                 rcv_user.setLayoutManager(new GridLayoutManager(DataActivity.this ,1));
@@ -119,7 +120,9 @@ public class DataActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(jsonArrayRequest);
     }
+    // HAM THEM
     private void postAPI(String url) {
+        // METHOD POST
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -137,11 +140,10 @@ public class DataActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String>map = new HashMap<>();
-
                 map.put("name",edt_name.getText().toString());
                 map.put("email",edt_email.getText().toString());
 
-
+                //lấy các trường trừ id từ plain text
                 return  map;
             }
         };
@@ -149,7 +151,10 @@ public class DataActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
         getDataFromMockAPI(url);
     }
+    // HAM SUA
+    // PUT THI CAN 1 PLAIN TEXT CHUA ID DE SUA
     private void PutAPI(String url){
+        // nhập id vào plaintext đẻ có thể tìm thấy user cần sửa
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, url + "/" + edt_id.getText().toString(),
                 new Response.Listener<String>() {
 
@@ -169,6 +174,7 @@ public class DataActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> params = new HashMap<>();
+                //lấy các trường trừ id từ plain text
                 params.put("name",edt_name.getText().toString());
                 params.put("email",edt_email.getText().toString());
                 return params;

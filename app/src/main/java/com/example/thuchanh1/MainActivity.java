@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
-
+        // KHAI BAO
         auth = FirebaseAuth.getInstance();
 
 
@@ -37,11 +37,12 @@ public class MainActivity extends AppCompatActivity {
 
         btnLogin = (Button) findViewById(R.id.btnLogin);
 
-
+        // SU KIEN NUT LOGIN
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (valid()) {
+                    // LAY TEXT TU PLANTEXT SO SANH VOI TAI KHOAN CO SAN
                     String emailValue = email.getText().toString().trim();
                     String passvalue = password.getText().toString().trim();
 
